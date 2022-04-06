@@ -2,65 +2,64 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top:7rem;
+    margin-top: 7rem;
     text-align: center;
     flex-direction: row;
-    /* width: ; */
-}
-.login-card{
-    width: 20rem;
-    height: 27rem;
-    padding: 1rem;
-    border:1px solid #ccc;
 }
 
-.bottom-card{
-    width: 20rem;
-    margin-top:1rem;
+.login-card{
+    width:20rem;
+    /* height:25rem; */
     padding: 1rem;
-    border: 1px solid #ccc;
+    border : 1px solid #ccc;
+}
+ 
+.bottom-card{
+    width:20rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    border : 1px solid #ccc;
 }
 
 .carbg{
-    background: url('../assets/insta-back.png');
+    background: url('../assets/carbg.png');
     background-size: cover;
     height: 590px;
-    width: 441px;
+    width:441px;
     position: relative;
 }
+
 .car{
     height: 423px;
-    width: 241px;
-    /* position: absloute; */
-    top:100px;
-    left: 143px;
-    margin-top: 20px;
-    margin-left: 150px;
+    width:241px;
+    position: absolute;
+    top:26px;
+    left:145px;
 }
 
-@media only screen and (max-width: 500px){
+@media only screen and (max-width:500px){
     .login-card{
-        width: 100%;
+        width:100%;
     }
     .bottom-card{
-        width: 100%;
+        width:100%;
     }
+
     .carbg{
         display: none;
     }
 }
-@media only screen and (max-width: 700px){
-    .carbg{
-        display: none;
-    }
-}
-@media only screen and (max-width: 800px){
+
+@media only screen and (max-width:800px){
     .login-card{
-        width: 15rem;
+        width:15rem
     }
     .bottom-card{
-        width: 15rem;
+        width:15rem
     }
+}
+
+@media only screen and (max-width:700px){
     .carbg{
         display: none;
     }

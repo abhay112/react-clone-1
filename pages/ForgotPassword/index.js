@@ -1,18 +1,23 @@
 import React, { useContext, useEffect } from "react";
+import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
+// Next inbuilt Image
 import Image from "next/image";
-import insta from "../../assets/insta.svg";
-import Button from "@mui/material/Button";
-import bg1 from "../../assets/bg1.png";
-import bg3 from "../../assets/bg3.png";
-import bg2 from "../../assets/bg2.png";
+import insta from "../../assets/insta.jpg";
+import {
+  CarouselProvider,
+  Slider,
+  Slide,
+  Image as Img,
+} from "pure-react-carousel";
+import bg1 from "../../assets/bg1.jpg";
+import bg2 from "../../assets/bg2.jpg";
+import bg3 from "../../assets/bg3.jpg";
 import { Carousel } from "react-responsive-carousel";
 import { AuthContext } from "../../context/auth";
-import { useRouter, Router } from "next/router";
-
+import { useRouter } from "next/router";
 function Index() {
   const router = useRouter();
-
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
@@ -25,10 +30,10 @@ function Index() {
       setLoading(true);
       setError("");
       await forgot(email);
-      console.log("Email sent");
+      console.log("Email Sent");
       router.push("/login");
     } catch (err) {
-      console.log("error");
+      console.log(err);
       setError(err.message);
       setTimeout(() => {
         setError("");
@@ -41,7 +46,7 @@ function Index() {
     if (user) {
       router.push("/");
     } else {
-      console.log("not logginn");
+      console.log("Not logged in");
     }
   }, [user]);
 
@@ -51,10 +56,12 @@ function Index() {
         <div className="car">
           <Carousel
             showIndicators={false}
-            showArrows={false}
+            showThumbs={false}
+            showStatus={false}
             infiniteLoop={true}
             interval={2000}
             autoPlay={true}
+            showArrows={false}
           >
             <Image src={bg1}></Image>
             <Image src={bg2}></Image>
@@ -65,6 +72,7 @@ function Index() {
       <div>
         <div className="login-card">
           <Image src={insta} />
+
           <TextField
             size="small"
             margin="dense"
@@ -75,37 +83,25 @@ function Index() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          {/* <TextField
-            size="small"
-            margin="dense"
-            id="outlined-basic"
-            fullWidth
-            label="Password"
-            type="password"
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          /> */}
+          {/* <TextField size="small" margin='dense' id="outlined-basic" fullWidth
+                        label="Password" type="password" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} /> */}
 
           {error != "" && <div style={{ color: "red" }}>{error}</div>}
 
           <Button
             variant="contained"
             fullWidth
-            component="span"
             style={{ marginTop: "1rem" }}
             onClick={handleClick}
             disabled={loading}
           >
             Send Email
           </Button>
-          <div style={{ color: "red", marginTop: "0.5rem" }}>
-            Forget Password ?
-          </div>
+          {/* <div style={{ color: 'blue', marginTop: '0.5rem' }}>Forgot Password ?</div> */}
         </div>
         <div className="bottom-card">
-          Dont&apos;t Have an Account
-          <span style={{ color: "blue" }}>Login</span>
+          Don&apos;t Have an Account?{" "}
+          <span style={{ color: "blue" }}>Sign Up</span>
         </div>
       </div>
     </div>

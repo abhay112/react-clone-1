@@ -1,18 +1,25 @@
 import React, { useContext, useEffect } from "react";
+import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
+// Next inbuilt Image
 import Image from "next/image";
 import insta from "../../assets/insta.svg";
-import Button from "@mui/material/Button";
+import {
+  CarouselProvider,
+  Slider,
+  Slide,
+  Image as Img,
+} from "pure-react-carousel";
 import bg1 from "../../assets/bg1.png";
-import bg3 from "../../assets/bg3.png";
 import bg2 from "../../assets/bg2.png";
+import bg3 from "../../assets/bg3.png";
 import { Carousel } from "react-responsive-carousel";
 import { AuthContext } from "../../context/auth";
 import { useRouter } from "next/router";
 import Link from "next/link";
+
 function Index() {
   const router = useRouter();
-
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
@@ -25,9 +32,9 @@ function Index() {
       setLoading(true);
       setError("");
       await login(email, password);
-      console.log("Logged in");
+      console.log("Logged in!");
     } catch (err) {
-      console.log("error");
+      console.log(err);
       setError(err.message);
       setTimeout(() => {
         setError("");
@@ -37,10 +44,15 @@ function Index() {
   };
 
   useEffect(() => {
-    if (user) {
+    console.log("login aaya");
+    if (user?.uid) {
+      console.log(user);
+      console.log(user == "");
+      console.log(user == null);
+      console.log("user not equal to null");
       router.push("/");
     } else {
-      console.log("not logginn");
+      console.log("Not logged in");
     }
   }, [user]);
 
@@ -50,10 +62,12 @@ function Index() {
         <div className="car">
           <Carousel
             showIndicators={false}
-            showArrows={false}
+            showThumbs={false}
+            showStatus={false}
             infiniteLoop={true}
             interval={2000}
             autoPlay={true}
+            showArrows={false}
           >
             <Image src={bg1}></Image>
             <Image src={bg2}></Image>
@@ -64,6 +78,7 @@ function Index() {
       <div>
         <div className="login-card">
           <Image src={insta} />
+
           <TextField
             size="small"
             margin="dense"
@@ -91,23 +106,20 @@ function Index() {
           <Button
             variant="contained"
             fullWidth
-            component="span"
             style={{ marginTop: "1rem" }}
             onClick={handleClick}
             disabled={loading}
           >
-            login
+            Login In
           </Button>
-          <Link href="ForgotPassword">
-            <div style={{ color: "red", marginTop: "0.5rem" }}>
-              <span style={{ cursor: "pointer" }}>Forget Password ?</span>
-            </div>
-          </Link>
+          <div style={{ color: "blue", marginTop: "0.5rem" }}>
+            Forgot Password ?
+          </div>
         </div>
         <div className="bottom-card">
-          Dont&apos;t Have an Account{" "}
+          Don&apos;t Have an Account?{" "}
           <Link href="/signup">
-            <span style={{ color: "blue", cursor: "pointer" }}>Sign Up</span>
+            <span style={{ color: "blue" }}>Sign Up</span>
           </Link>
         </div>
       </div>

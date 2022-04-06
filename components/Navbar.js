@@ -16,16 +16,17 @@ import Image from "next/image";
 import HomeIcon from "@mui/icons-material/Home";
 import ExploreIcon from "@mui/icons-material/Explore";
 import { AuthContext } from "../context/auth";
-// import { Router } from "@mui/icons-material";
 import { Router, useRouter } from "next/router";
+import Link from "next/link";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Logout"];
 
-const ResponsiveAppBar = () => {
+const ResponsiveAppBar = ({ userData }) => {
+  console.log(userData);
+  const { logout } = React.useContext(AuthContext);
   const router = useRouter();
 
-  const { logout } = React.useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -46,11 +47,16 @@ const ResponsiveAppBar = () => {
 
   const handleLogout = async () => {
     await logout();
+    console.log("Logged out!");
     router.push("/login");
   };
 
   return (
-    <AppBar position="static" className="navbar">
+    <AppBar
+      position="static"
+      className="navbar"
+      style={{ backgroundColor: "white" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -59,7 +65,7 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ mr: 2, display: { xs: "flex", md: "flex" } }}
           >
-            <Image src={insta} height={55} width={200}  alt='insta'/>
+            <Image src={insta} height={55} width={200} />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}></Box>
@@ -71,7 +77,7 @@ const ResponsiveAppBar = () => {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   alt="Remy Sharp"
-                  // src="/static/images/avatar/2.jpg"
+                  src={userData?.photoURL}
                   sx={{ margin: "0.5rem" }}
                 />
               </IconButton>
@@ -93,12 +99,13 @@ const ResponsiveAppBar = () => {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Profile</Typography>
+                <Link href="/profile">
+                  <Typography textAlign="center">Profile</Typography>
+                </Link>
               </MenuItem>
               <MenuItem
                 onClick={() => {
                   handleLogout();
-                  handleCloseUserMenu;
                 }}
               >
                 <Typography textAlign="center">Logout</Typography>

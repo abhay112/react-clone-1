@@ -1,16 +1,14 @@
 import "../styles/globals.css";
 import "./signup.css";
 import "./login.css";
-import "pure-react-carousel/dist/react-carousel.es.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../components/Feed.css";
-import AuthWrapper from "../context/auth";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import "../components/Profile.css";
-
+import AuthWrapper from "../context/auth";
 function MyApp({ Component, pageProps }) {
   return (
     <AuthWrapper>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </AuthWrapper>
   );
 }

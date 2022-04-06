@@ -1,16 +1,15 @@
 import React, { useContext, useEffect } from "react";
+import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
+// Next inbuilt Image
 import Image from "next/image";
-import insta from "../../assets/insta.svg";
-import Button from "@mui/material/Button";
+import insta from "../../assets/insta.jpg";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AuthContext } from "../../context/auth";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage,db } from "../../firebase";
-
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { db, storage } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
-
 function Index() {
   const router = useRouter();
   const [email, setEmail] = React.useState("");
@@ -26,13 +25,23 @@ function Index() {
     try {
       setLoading(true);
       setError("");
+      // auth -> unique id
       const user = await signup(email, password);
-      console.log("Signed up");
+      console.log("Signed Up!");
+      // storage
       const storageRef = ref(storage, `${user.uid}/Profile`);
+
       const uploadTask = uploadBytesResumable(storageRef, file);
+
+      // Register three observers:
+      // 1. 'state_changed' observer, called any time the state changes
+      // 2. Error observer, called on failure
+      // 3. Completion observer, called on successful completion
       uploadTask.on(
         "state_changed",
         (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log("Upload is " + progress + "% done");
@@ -42,21 +51,21 @@ function Index() {
           console.log(error);
         },
         () => {
-          getDownloadURL(uploadTask.snapshot.ref)
-            .then(async (downloadURL) => {
-              console.log("File available at", downloadURL);
-              let obj = {
-                name: name,
-                email: email,
-                uid: user.user.uid,
-                photoURL: downloadURL,
-              };
-              await setDoc(doc(db, "users", user.user.uid), obj);
-              console.log("docment added");
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            console.log("File available at", downloadURL);
+            let obj = {
+              name: name,
+              email: email,
+              uid: user.user.uid,
+              photoURL: downloadURL,
+              posts: [],
+            };
+            // firestore
+            await setDoc(doc(db, "users", user.user.uid), obj);
+            console.log("doc added");
+          });
         }
       );
     } catch (err) {
@@ -68,18 +77,21 @@ function Index() {
     }
     setLoading(false);
   };
+
   useEffect(() => {
     if (user) {
       router.push("/");
     } else {
-      console.log("Not Logged in");
+      console.log("Not logged in");
     }
   }, [user]);
 
   return (
     <div className="signup-container">
       <div className="signup-card">
+        {/* basic image use method */}
         <Image src={insta} />
+
         <TextField
           size="small"
           margin="dense"
@@ -120,26 +132,26 @@ function Index() {
           <input
             type="file"
             accept="image/*"
-            style={{ display: "none", marginRight: "1rem" }}
+            style={{ display: "none" }}
             onChange={(e) => setFile(e.target.files[0])}
           />
           Upload
         </Button>
+
         <Button
           variant="contained"
           fullWidth
-          component="span"
           style={{ marginTop: "1rem" }}
-          disabled={loading}
           onClick={handleClick}
+          disabled={loading}
         >
-          Signup
+          Sign Up
         </Button>
       </div>
       <div className="bottom-card">
-        Already Have an Account
+        Already Have an Account?{" "}
         <Link href="/login">
-          <span style={{ color: "blue", cursor: "pointer" }}>Login</span>
+          <span style={{ color: "blue" }}>Login</span>
         </Link>
       </div>
     </div>
